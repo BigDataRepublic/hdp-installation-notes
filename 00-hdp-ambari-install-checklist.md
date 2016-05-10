@@ -18,16 +18,17 @@ an Active Directory server on Windows or a MIT kerberos on Linux).
 
 ### Networking related
 
-* [ ] Verify that each host has the FQDN set properly
-* [ ] Make sure that /etc/hosts is configured properly
-    * [ ] Mappings to 127.0.0.1 are removed/disabled
+* [ ] Each node has the FQDN set properly
+* [ ] Each node has /etc/hosts has configured properly
+    * [ ] Mapping to 127.0.0.1 is removed/disabled
     * [ ] All nodes which needs to be managed by Ambari are mapped
-    * [ ] Above is true for all hosts part of the HDP cluster
-* [ ] IPv6 is disabled on all nodes in the cluster
-* [ ] iptables and/or firewalling are disabled
+* [ ] Each node has /etc/sysconfig/network configured properly
+* [ ] Each node has IPv6 is disabled
+* [ ] Each node has iptables and/or firewalling disabled
 * [ ] SSH-keyless login from Ambari host to other hosts is possible
     * [ ] A public/private keypair is generated on the Ambari host
-    * [ ] The Amabari host public key is added to ~/.ssh/authorized keys on all hosts
+    * [ ] The Amabari host public key is added to /root/.ssh/authorized keys on all hosts
+    * [ ] Each node has access rights 600 on /root/.ssh/
 
 ### Database configuration
 

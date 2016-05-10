@@ -45,4 +45,15 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--usbehci", "off"]
       end
   end
+
+    config.vm.define "ipa", autostart: true do |vm|
+      vm.vm.hostname = "ipa.bdr.nl"
+      vm.vm.network "private_network", ip: "10.0.0.6"
+      vm.vm.provider "virtualbox" do |vb|
+        vb.cpus = 1
+        vb.customize ["modifyvm", :id, "--memory", "2048", "--nicpromisc1", "allow-all"]
+        vb.customize ["modifyvm", :id, "--usb", "off"]
+        vb.customize ["modifyvm", :id, "--usbehci", "off"]
+      end
+  end
 end
