@@ -16,16 +16,31 @@ The purpose of this guide is to give some hands-on experience with setting up a 
 
 ## Outline
 
-1. [Design](doc/design.md)
-1. [Host-preparation](hostpreparation.md)
-1. [FreeIPA configuration](doc/freeipa.md)
-1. [Ambari preparation](ambariserverpreparation.md)
-1. [Ambari preparation](ambariagentpreparation.md)
-1. [Ambari roll-out](ambarirollout.md)
+1. ### [Design](doc/design.md)
+
+1. ### Beginner
+
+  1. [Ambari server preparation](doc/ambariserverpreparation.md)
+  1. [Ambari agent preparation](doc/ambariagentpreparation.md)
+  1. [Ambari roll-out](doc/ambarirollout.md)
+
+1. ### Intermediate
+
+  1. [FreeIPA configuration](doc/freeipa.md)
+  1. [Ambari LDAP integration]()
+  1. [HiveServer2] LDAP integration]()
+
+1. ### Expert
+
+  1. Ranger
+  1. SSL
+  1. Kerberos
+
+
 
 ## Prequisites
 
-Before you can start with this tutorial you must have installed Vagrant and VirtualBox on your machine. Vagrant will setup five machines, with each of them having 2GB of memory. Thus, your machine must have a decent amount of memory.
+Before you can start with this tutorial you must have installed [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/) on your machine. Vagrant will setup five machines, with each of them having 2GB of memory. Thus, your machine must have a decent amount of memory.
 
 We provide a Vagrant image which, for this tutorial, must be registered to vagrant as follows:
 

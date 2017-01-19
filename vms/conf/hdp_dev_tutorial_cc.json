@@ -1,0 +1,48 @@
+{
+  "blueprint" : "multinode-hdp-dev-tutorial-cluster",
+  "host_groups" :[
+    {
+      "name" : "host_group_1",
+      "hosts" : [
+        {
+          "fqdn" : "en.bdr.nl"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_2",
+      "hosts" : [
+        {
+          "fqdn" : "wn.bdr.nl"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_3",
+      "hosts" : [
+        {
+          "fqdn" : "mn1.bdr.nl"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_4",
+      "hosts" : [
+        {
+          "fqdn" : "mn2.bdr.nl"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_5",
+      "hosts" : [
+        {
+          "fqdn" : "wn1.bdr.nl"
+        }
+      ]
+    }
+  ],
+  "Clusters" : {
+    "cluster_name": "HDP_DEV_TUTORIAL"
+  }
+}

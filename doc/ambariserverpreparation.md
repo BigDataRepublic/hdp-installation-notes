@@ -22,187 +22,13 @@ vagrant@gw.bdr.nl $ sudo su -
 root@en.bdr.nl $
 ```
 
-# Register the host to FreeIPA
-
-The first step is to register the host to FreeIPA. We need to install the ipa-client and perform the ipa-client-install as detailed below.
-
-```
-root@en.bdr.nl $ yum install -y ipa-client
-root@en.bdr.nl $ ipa-client-install
-DNS discovery failed to determine your DNS domain
-Provide the domain name of your IPA server (ex: example.com): bdr.nl
-Provide your IPA server name (ex: ipa.example.com): gw.bdr.nl
-The failure to use DNS to find your IPA server indicates that your resolv.conf file is not properly configured.
-Autodiscovery of servers for failover cannot work with this configuration.
-If you proceed with the installation, services will be configured to always access the discovered server for all operations and will not fail over to other servers in case of failure.
-Proceed with fixed values and no DNS discovery? [no]: yes
-Client hostname: en.bdr.nl
-Realm: BDR.NL
-DNS Domain: bdr.nl
-IPA Server: gw.bdr.nl
-BaseDN: dc=bdr,dc=nl
-
-Continue to configure the system with these values? [no]: yes
-Synchronizing time with KDC...
-Attempting to sync time using ntpd.  Will timeout after 15 seconds
-User authorized to enroll computers: admin
-Password for admin@BDR.NL:
-Successfully retrieved CA cert
-    Subject:     CN=Certificate Authority,O=BDR.NL
-    Issuer:      CN=Certificate Authority,O=BDR.NL
-    Valid From:  Fri Jul 01 20:15:36 2016 UTC
-    Valid Until: Tue Jul 01 20:15:36 2036 UTC
-
-Enrolled in IPA realm BDR.NL
-Created /etc/ipa/default.conf
-New SSSD config will be created
-Configured sudoers in /etc/nsswitch.conf
-Configured /etc/sssd/sssd.conf
-Configured /etc/krb5.conf for IPA realm BDR.NL
-trying https://gw.bdr.nl/ipa/json
-Forwarding 'ping' to json server 'https://gw.bdr.nl/ipa/json'
-Forwarding 'ca_is_enabled' to json server 'https://gw.bdr.nl/ipa/json'
-Systemwide CA database updated.
-Added CA certificates to the default NSS database.
-Hostname (en.bdr.nl) does not have A/AAAA record.
-Failed to update DNS records.
-Missing A/AAAA record(s) for host en.bdr.nl: 10.0.0.3.
-Missing reverse record(s) for address(es): 10.0.0.3.
-Adding SSH public key from /etc/ssh/ssh_host_rsa_key.pub
-Adding SSH public key from /etc/ssh/ssh_host_ecdsa_key.pub
-Adding SSH public key from /etc/ssh/ssh_host_ed25519_key.pub
-Forwarding 'host_mod' to json server 'https://gw.bdr.nl/ipa/json'
-Could not update DNS SSHFP records.
-SSSD enabled
-Configured /etc/openldap/ldap.conf
-No SRV records of NTP servers found. IPA server address will be used
-NTP enabled
-Configured /etc/ssh/ssh_config
-Configured /etc/ssh/sshd_config
-Configuring bdr.nl as NIS domain.
-Client configuration complete.
-
-```
-
-Once the setup is completed, FreeIPA now should mark the Edge Node as enrolled (you might need to refresh the page):
-
-
-![](img/ipa_host_en_enrolled.png)
-
-# Create a user for Ambari
-
-By default ambari-server and ambari-agents run as root. This is not best practice so we will create a dedicated user, called ambari, under which these services will run. As we use FreeIPA, we can create the ambari user there, and it will become available on all nodes, once each of them has been enrolled to FreeIPA.
-
-## Create the hadoop users group
-
-The ambari user must be in the hadoop group<sup>[*](https://docs.hortonworks.com/HDPDocuments/Ambari-2.2.1.1/bk_Ambari_Security_Guide/content/_how_to_configure_ambari_server_for_non-root.html)</sup>. Let's add a group hadoop first. Go to the FreeIPA webinterface and click the 'User Groups' tab under 'Identity'.
-
-![](img/ipa_hadoop_group_1.png)
-
-Click add group to create a new group. The group name **must** be hadoop and the group type **must** be posix, as this group will serve as a linux user group on our cluster nodes.
-
-![](img/ipa_hadoop_group_2.png)
-
-Click add, and the group should now appear in the group list.
-
-![](img/ipa_hadoop_group_3.png)
-
-## Create the ambari user
-
-![](img/ipa_ambari_user_1.png)
-
-![](img/ipa_ambari_user_2.png)
-
-Click add and edit:
-
-![](img/ipa_ambari_user_3.png)
-
-Make sure that the following details are correct:
-
-
-### Settings
-
-* login shell: /bin/bash
-
-### User Groups
-
-* Add the earlier create hadoop group
-
-![](img/ipa_ambari_add_group_1.png)
-
-![](img/ipa_ambari_add_group_2.png)
-
-![](img/ipa_ambari_add_group_3.png)
-
-
-## Create a sudoers rule
-
-The ambari user relies on sudo to run specific commands that require elevated privileges. Therefore we must create a proper sudo rule for the ambari user ([details](https://docs.hortonworks.com/HDPDocuments/Ambari-2.2.1.1/bk_Ambari_Security_Guide/content/_configuring_ambari_for_non-root.html)).
-
-![](img/ipa_sudo_rule_1.png)
-
-![](img/ipa_sudo_rule_2.png)
-
-![](img/ipa_sudo_rule_3.png)
-
-![](img/ipa_sudo_rule_4.png)
-
-![](img/ipa_sudo_rule_5.png)
-
-![](img/ipa_sudo_rule_6.png)
-
-![](img/ipa_sudo_rule_7.png)
-
-![](img/ipa_sudo_rule_8.png)
-
-![](img/ipa_sudo_rule_9.png)
-
-![](img/ipa_sudo_rule_10.png)
-
-## Check if everything works
-
-Once you have created the hadoop group, ambari user, and the appropriate sudo configuration, you will restart the sssd service on en.bdr.nl:
-
-```
-root@en.bdr.nl $ service sssd restart
-root@en.bdr.nl $ sudo su - ambari
-# sudo su - ambari
-Last login: Fri Jul  1 17:28:55 PDT 2016 on pts/0
-su: warning: cannot change directory to /home/ambari: No such file or directory
-ambari@en.bdr.nl $
-```
-
-The warning can be fixed by creating a home directory for ambari. This is not strictly required, but is done as follows:
-
-```
-ambari@en.bdr.nl $ exit
-root@en.bdr.nl $ mkdir /home/ambari
-root@en.bdr.nl $ chown -R ambari:ambari /home/ambari
-root@en.bdr.nl $ sudo - su ambari
-Last login: Fri Jul  1 17:34:04 PDT 2016 on pts/0
-ambari@en.bdr.nl $
-```
-
-Let's check our sudo rights:
-
-```
-ambari@en.bdr.nl $ sudo -l
-Matching Defaults entries for ambari on this host:
-    !visiblepw, always_set_home, env_reset, env_keep="COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE", env_keep+="LC_COLLATE LC_IDENTIFICATION
-    LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY", secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
-
-User ambari may run the following commands on this host:
-    (ALL : ALL) NOPASSWD: ALL
-ambari@en.bdr.nl $ sudo su -
-root@en.bdr.nl $
-```
-
 ## Install ambari-server
 
 Install ambari-server. PostgreSQL will be installed as well as it is a dependency.
 
 ```
-root@en.bdr.nl $ wget -nv http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.2.2.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
+root@en.bdr.nl $ yum install wget
+root@en.bdr.nl $ wget -nv http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.4.0.1/ambari.repo -O /etc/yum.repos.d/ambari.repo
 root@en.bdr.nl $ yum install ambari-server
 ....
 Retrieving key from http://public-repo-1.hortonworks.com/ambari/centos7/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins
@@ -225,6 +51,7 @@ Note: Forwarding request to 'systemctl enable postgresql.service'.
 Created symlink from /etc/systemd/system/multi-user.target.wants/postgresql.service to /usr/lib/systemd/system/postgresql.service.
 root@en.bdr.nl $ systemctl start postgresql
 root@en.bdr.nl $ su - postgres
+postgres@en.bdr.nl $ mv data/pg_hba.conf data/pg_hba.conf.bak
 postgres@en.bdr.nl $ vi data/pg_hba.conf
 
 ```
@@ -256,8 +83,29 @@ Next, we have to restart the PostgreSQL server:
 
 ```
 postgres@en.bdr.nl $ exit
-root@en.bdr.nl $ systemctl restart postgres
+root@en.bdr.nl $ systemctl restart postgresql
 ```
+
+Create the required database:
+
+```
+root@en.bdr.nl $ sudo -u postgres psql
+psql (9.2.15)
+Type "help" for help.
+
+postgres=# CREATE DATABASE ambaridb;
+postgres=# CREATE USER ambari WITH PASSWORD 'ambari';
+postgres=# GRANT ALL PRIVILEGES ON DATABASE ambaridb TO ambari;
+postgres=# \connect ambaridb;
+ambaridb=# CREATE SCHEMA ambari AUTHORIZATION ambari;
+ambaridb=# ALTER SCHEMA ambari OWNER TO ambari;
+ambaridb=# ALTER ROLE ambari SET search_path to ‘ambari’, 'public';
+postgres=# CREATE DATABASE hivedb;
+postgres=# CREATE USER hive WITH PASSWORD 'hive';
+postgres=# GRANT ALL PRIVILEGES ON DATABASE hivedb TO hive;
+ambaridb=# \q
+```
+
 
 Create the required tables:
 
@@ -300,7 +148,7 @@ Checking JDK...
 Enter choice (1): 3
 WARNING: JDK must be installed on all hosts and JAVA_HOME must be valid on all hosts.
 WARNING: JCE Policy files are required for configuring Kerberos security. If you plan to use Kerberos,please make sure JCE Unlimited Strength Jurisdiction Policy Files are valid on all hosts.
-Path to JAVA_HOME: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-1.b14.el7_2.x86_64/jre
+Path to JAVA_HOME: /usr/lib/jvm/jre-1.8.0-openjdk
 Validating JDK on Ambari Server...done.
 Completing setup...
 Configuring database...
@@ -350,7 +198,7 @@ Ambari Server 'start' completed successfully.
 
 ```
 
-Point your browser to 10.0.0.3:8080. You should see the Ambari management webinterface. Log in with user admin, password admin.
+Point your browser to [http://10.0.0.3:8080](http://10.0.0.3:8080). You should see the Ambari management webinterface. Log in with user admin, password admin.
 
 ![](img/ambari_initial_1.png)
 
