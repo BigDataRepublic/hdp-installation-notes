@@ -3,27 +3,31 @@
 # All hosts
 
 1. Become root
-```
-    $ su -
-```
 
+    ```
+    $ su -
+    ```
 1. Make sure our system is up to date
-```
+
+    ```
     $ yum update
-```
+    ```
 1. Configure timezone and ntpd
 
 First we will install and run the ntp deamon: A Network Time Protocol daemon. This protocol is the most common method to synchronize the software clock of a GNU/Linux system with internet time servers. It is designed to ensure that all nodes on your clusters have the same idea about what time and day it is.
-```
+
+    ```
     $ yum install ntp
-```
+    ```
 Now that the service is installed we will setup the desired timezone and date settings. We will backup the current settings and use the Amsterdam timezone as the new settings. After we have set the settings the ntpd deamon will be started.
-```
+    
+    ```
     $ mv /etc/localtime /etc/localtime.bkp
     $ cp /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime
     $ chkconfig ntpd on
     $ service ntpd start
-```
+    ```
+
 1. Disable Transparant Huge Pages
 
 Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memory block size. The standard size of a memory block is 4kb but with THP you can increase the blocks to 256MB. However, in memory databases benifit of small memory blocks because they know which blocks contains which data but they do not know where in the block this exact data lies. This means that the database would rather look through 4kb of data than through 256mb of data.
