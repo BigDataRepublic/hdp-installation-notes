@@ -6,6 +6,7 @@
 ```
     $ su -
 ```
+
 1. Make sure our system is up to date
 ```
     $ yum update
