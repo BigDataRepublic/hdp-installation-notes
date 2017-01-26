@@ -116,13 +116,13 @@ Paste or write the following in the bottom of the file and close it
     $ wget -nv http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.1.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
     $ yum install ambari-server
 ```
-1.  Install and configure PostgreSQL
-    1. Install PostgreSQL 9.3 (https://wiki.postgresql.org/wiki/YUM_Installation)
+
+1. Install PostgreSQL 9.3 (https://wiki.postgresql.org/wiki/YUM_Installation)
 ```
       $ vim /etc/yum.repos.d/CentOS-Base.repo
 ```
 
-    1. We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
+1. We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
 ```
     Add line: `exclude=postgresql*` to base and updates section
 ```
@@ -161,8 +161,8 @@ Uncomment the following line and change the value:
       root $ service postgresql-9.3 restart
 ```
 
-    1. Prepare Postgres databases for HDP.
-    We will setup the following databases:
+1. Prepare Postgres databases for HDP.
+We will setup the following databases:
 ```
         database name | user name  | password
         --------------+------------+------------
@@ -209,14 +209,14 @@ Uncomment the following line and change the value:
         ambaridb=# \q
 ```
 
-    1. Make sure Ambari knows how to talk PostgreSQL
-    We will install a driver to connect from ambari to postgres and then connect to postgres using this driver.
+1. Make sure Ambari knows how to talk PostgreSQL
+We will install a driver to connect from ambari to postgres and then connect to postgres using this driver.
 ```
     $ yum install postgresql-jdbc
     $ ambari-server setup --jdbc-db=postgres --jdbc-driver=/usr/share/java/postgresql-jdbc.jar
 ```
 
-    1. Create a dedicated user for running ambari
+1. Create a dedicated user for running ambari
 ```
     $ groupadd hadoop
     $ useradd -G hadoop ambari
