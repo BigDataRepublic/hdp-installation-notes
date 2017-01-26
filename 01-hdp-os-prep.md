@@ -203,17 +203,17 @@ Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memor
     We will setup the following databases:
     
     ```
-        database name | user name  | password
-        --------------+------------+------------
-        ambaridb      | ambari     | ambari
-        hivedb        | hive       | hive
-        ooziedb       | oozie      | oozie
-        rangerdb      | ranger     | ranger
+    database name | user name  | password
+    --------------+------------+------------
+    ambaridb      | ambari     | ambari
+    hivedb        | hive       | hive
+    ooziedb       | oozie      | oozie
+    rangerdb      | ranger     | ranger
     ```
     
     ```
-        $ sudo su - postgres
-        $ psql
+    $ sudo su - postgres
+    $ psql
     ```
     
     ```
@@ -250,9 +250,9 @@ Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memor
     ```
     
     ```
-        $ psql -U ambari -d ambaridb (Password = ambari)
-        ambaridb=# \i /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
-        ambaridb=# \q
+    $ psql -U ambari -d ambaridb (Password = ambari)
+    ambaridb=# \i /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
+    ambaridb=# \q
     ```
 
 1. Make sure Ambari knows how to talk PostgreSQL
