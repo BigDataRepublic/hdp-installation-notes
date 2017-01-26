@@ -104,33 +104,12 @@ Paste or write the following in the bottom of the file and close it
     $ scp ~/.ssh/id_rsa.pub vagrant@en1.bdr.nl:/home/vagrant/mgmt_id_rsa.pub
     $ scp ~/.ssh/id_rsa.pub vagrant@mn1.bdr.nl:/home/vagrant/mgmt_id_rsa.pub
     $ scp ~/.ssh/id_rsa.pub vagrant@wn1.bdr.nl:/home/vagrant/mgmt_id_rsa.pub
+    $ rsync -a --relative .ssh/authorized_keys en1
+    $ rsync -a --relative .ssh/authorized_keys mn1
+    $ rsync -a --relative .ssh/authorized_keys wn1
 ```
 
-# ALERT ALERT DO ONLY ON Host en1.bdr.nl
-```
-    $ mkdir ~/.ssh
-    $ touch ~/.ssh/authorized_keys
-    $ chmod 600 -R ~/.ssh
-    $ cat /home/vagrant/mgmt_id_rsa.pub >> ~/.ssh/authorized_keys
-```
-
-# ALERT ALERT DO ONLY ON Host mn1.bdr.nl
-```
-    $ mkdir ~/.ssh
-    $ touch ~/.ssh/authorized_keys
-    $ chmod 600 -R ~/.ssh
-    $ cat /home/vagrant/mgmt_id_rsa.pub >> ~/.ssh/authorized_keys
-```
-
-# ALERT ALERT DO ONLY ON Host wn1.bdr.nl
-```
-    $ mkdir ~/.ssh
-    $ touch ~/.ssh/authorized_keys
-    $ chmod 600 -R ~/.ssh
-    $ cat /home/vagrant/mgmt_id_rsa.pub >> ~/.ssh/authorized_keys
-```
-
-# ALERT ALERT DO ONLY ON Continue on management node Host wn1.bdr.nl
+# Installating Ambari and PostgreSQL on the management node
 
 1. Install Ambari
 ```
@@ -142,9 +121,11 @@ Paste or write the following in the bottom of the file and close it
 ```
       $ vim /etc/yum.repos.d/CentOS-Base.repo
 ```
-    1. We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository. 
+    2. We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
 
+```
     Add line: `exclude=postgresql*` to base and updates section
+```
 ```
       $ yum localinstall https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-2.noarch.rpm
       $ yum install postgresql93-server
@@ -152,18 +133,21 @@ Paste or write the following in the bottom of the file and close it
       $ chkconfig postgresql-9.3 on
       $ service postgresql-9.3 start
 ```
-    1. Make sure password access of postgres is possible
 
-    1. Change password authentication [info](http://stackoverflow.com/questions/18664074/getting-error-peer-authentication-failed-for-user-postgres-when-trying-to-ge)
-    1. Create proper tables and roles [info](https://docs.hortonworks.com/HDPDocuments/Ambari-2.1.2.1/bk_ambari_reference_guide/content/_using_ambari_with_postgresql.html)
-    1. Make sure the database can be accessed over tcp/ip [info](http://www.cyberciti.biz/tips/postgres-allow-remote-access-tcp-connection.html)
+    [MICHEL: deze punten weglaten?]
+    Make sure password access of postgres is possible
+
+
+    Change password authentication [info](http://stackoverflow.com/questions/18664074/getting-error-peer-authentication-failed-for-user-postgres-when-trying-to-ge)
+    Create proper tables and roles [info](https://docs.hortonworks.com/HDPDocuments/Ambari-2.1.2.1/bk_ambari_reference_guide/content/_using_ambari_with_postgresql.html)
+    Make sure the database can be accessed over tcp/ip [info](http://www.cyberciti.biz/tips/postgres-allow-remote-access-tcp-connection.html)
 ```
       root $ su - postgres
       postgres $ vim /var/lib/pgsql/9.3/data/pg_hba.conf
 ```
-Change the existing users for "local", "IPv4" and "IPv6" from *all* to *postgres*
+Change the existing users for "local", "IPv4" and "IPv6" from *all* to *postgres* and add the following lines to the file:
 ```
-      local ambaridb ambari                         md5
+      host  ambaridb ambari             10.0.0.2/32 md5
       host  rangerdb ranger,rangeraudit 10.0.0.2/32 md5
       host  hivedb   hive               10.0.0.3/32 md5
       host  ooziedb  oozie              10.0.0.3/32 md5
@@ -171,7 +155,7 @@ Change the existing users for "local", "IPv4" and "IPv6" from *all* to *postgres
 ```
       postgres $ vim /var/lib/pgsql/9.3/data/postgresql.conf
 ```
-Uncomment the following line and change the value:e
+Uncomment the following line and change the value:
 ```
       listen_addresses = '*'
 ```
@@ -180,7 +164,7 @@ Uncomment the following line and change the value:e
       root $ service postgresql-9.3 restart
 ```
 
-    1. Prepare Postgres databases for HDP
+    3. Prepare Postgres databases for HDP
 
     We will setup the following databases:
 ```
@@ -228,13 +212,13 @@ Uncomment the following line and change the value:e
         ambaridb=# \i /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
         ambaridb=# \q
 ```
-    1. Make sure Ambari knows how to talk PostgreSQL
+    4. Make sure Ambari knows how to talk PostgreSQL
     We will install a driver to connect from ambari to postgres and then connect to postgres using this driver.
 ```
     $ yum install postgresql-jdbc
     $ ambari-server setup --jdbc-db=postgres --jdbc-driver=/usr/share/java/postgresql-jdbc.jar
 ```
-1. Create a dedicated user for running ambari
+    5. Create a dedicated user for running ambari
 ```
     $ groupadd hadoop
     $ useradd -G hadoop ambari
