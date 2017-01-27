@@ -128,9 +128,6 @@ Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memor
     ```
     $ ssh-keygen (Press enter for every question)
     $ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-    $ scp ~/.ssh/id_rsa.pub vagrant@en1.bdr.nl:/home/vagrant/mgmt_id_rsa.pub
-    $ scp ~/.ssh/id_rsa.pub vagrant@mn1.bdr.nl:/home/vagrant/mgmt_id_rsa.pub
-    $ scp ~/.ssh/id_rsa.pub vagrant@wn1.bdr.nl:/home/vagrant/mgmt_id_rsa.pub
     $ rsync -a --relative .ssh/authorized_keys en1
     $ rsync -a --relative .ssh/authorized_keys mn1
     $ rsync -a --relative .ssh/authorized_keys wn1
