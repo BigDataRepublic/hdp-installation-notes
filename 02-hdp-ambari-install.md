@@ -162,18 +162,18 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * YARN
     * ZooKeeper
 
-    Monitoring the cluster is enabled by the ambari metric agents that run on the
+    Monitoring the cluster is enabled by the ambari metrics agents that run on the
 hosts. The next step will be to configure NameNode High Availability (HA).
 
 1. A first simple test to see if the cluster is up to it's job
 
     Log into the mgmt1 host with ssh and become the hdfs user.
 
-    $ sudo su - hdfs
+        $ sudo su - hdfs
 
     Now write 100MB of random data to the cluster
 
-    $ yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar randomwriter -Dtest.randomwrite.total_bytes=10000000 test-after-upgrade
+        $ yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar randomwriter -Dtest.randomwrite.total_bytes=10000000 test-after-upgrade
 
 # Configuring NameNode HA
 
