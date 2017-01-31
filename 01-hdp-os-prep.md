@@ -133,7 +133,7 @@ Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memor
     $ sh /etc/rc.local
     ```
 
-Copy this configuration to the other nodes:
+    Copy this configuration to the other nodes:
 
     ```
     $ scp /etc/rc.local mn1:/etc
