@@ -8,8 +8,8 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
 1. Become root
 
-    $ sudo su -
-
+       $ sudo su -
+    
 1. Kick off Ambari setup
 
     ```
@@ -68,15 +68,11 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
 1. Start the ambari server
 
-    ```
-    $ ambari-server start
-    ```
+       $ ambari-server start
     
    if errors occur take a look at the startup log
 
-    ```
-    $ cat /var/log/ambari-server/ambari-server.out
-    ```
+       $ cat /var/log/ambari-server/ambari-server.out
 
 1. Open the Ambari webinterface in a browser
 
@@ -122,17 +118,15 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * Assign slaves and clients
 
         * mgmt1: 
-            * NodeManager
             * Client
         * mn1: 
+            * NodeManager
             * DataNode
             * Client
         * wn1: 
             * DataNode
-            * NodeManager
             * Client
         * en1: 
-            * NodeManager
             * Client
 
     * Customize services. For the minimal installation all configuration
@@ -179,15 +173,14 @@ https://docs.hortonworks.com/HDPDocuments/Ambari-2.2.1.1/bk_Ambari_Users_Guide/c
 
 1. Check to make sure you have at least three hosts in your cluster and are running at least three ZooKeeper servers.
 1. Check to make sure that the HDFS and ZooKeeper services are not in Maintenance Mode.
-1. In Ambari Web, select Services > HDFS > Summary.
-1. Select Service Actions and choose Enable NameNode HA.
-1, Enter a name for the Nameservice id: bdr-hadoop
+1. In Ambari Web, select *Services* > *HDFS* > *Summary*.
+1. Select Service Actions and choose *Enable NameNode HA*.
+1. Enter a name for the Nameservice id: `bdr-hadoop`
 1. Select hosts
-
-      mgmt1: JournalNode
-        mn1: NameNode, JournalNode
-        wn1: Aditional NameNode
-        en1: JournalNode
+    * mgmt1: JournalNode
+    * mn1: NameNode, JournalNode
+    * wn1: Aditional NameNode
+    * en1: JournalNode
 
 1. Create Checkpoints : Follow the instructions in the step. You need to log in
    to your current NameNode host to run the commands to put your NameNode into
@@ -227,9 +220,9 @@ the ZooKeeper nodes such that the ZooKeeper data and HDFS metadata is stored on
 separate disk drives.
 
 1. Check to make sure you have at least three hosts in your cluster and are running at least three ZooKeeper servers.
-1. In Ambari Web, select Dashboard -> Actions -> Stop all
-1. In Ambari Web, select Services > YARN > Summary.
-1. Select Service Actions and choose Enable ResourceManager HA.
+1. In Ambari Web, select *Dashboard* -> *Actions* -> *Stop all*
+1. In Ambari Web, select *Services* > *YARN* > *Summary*.
+1. Select *Service Actions* and choose *Enable ResourceManager HA*.
 1. Get Started -> click next
 1. Select Host -> Set mgmt1.bdr.nl as additional ResourceManager, click Next
 1. Review changes -> click next
