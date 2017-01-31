@@ -147,8 +147,8 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
             * NodeManager
             * Client
 
-    * Customize services. For the minimal install we have chosen all configuration
-      options should have been addresse properly by with recommended defaults.
+    * Customize services. For the minimal installation all configuration
+      options should have been addressed properly with the recommended defaults.
       The only thing we need to address is the fact that we run ambari-server as
       ambari user and not as root.
 
@@ -157,9 +157,11 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
       To this end we need to adapt the HDFS configuration:
 
       Add the following two properties to Custom core site:
-
+        
+        ```
         hadoop.proxyuser.ambari.groups=*
         hadoop.proxyuser.ambari.hosts=*
+        ```
 
     * Review the final configuration and start deployment
 
