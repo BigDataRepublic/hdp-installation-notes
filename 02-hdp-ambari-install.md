@@ -8,9 +8,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
 1. Become root
 
-    ```
     $ sudo su -
-    ```
 
 1. Kick off Ambari setup
 
