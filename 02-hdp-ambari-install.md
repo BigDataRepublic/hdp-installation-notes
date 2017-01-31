@@ -118,8 +118,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
     * Assign masters:
 
-    ![HDP master config]
-    (https://github.com/BigDataRepublic/hdp-installation-notes/edit/master/img/hdp_master_config.png)
+    ![HDP master config](img/hdp_master_config.png)
        
 
     * Assign slaves and clients
