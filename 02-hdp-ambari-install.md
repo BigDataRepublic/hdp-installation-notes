@@ -92,10 +92,12 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * Select the HDP 2.4 stack
     * Enter the list of hosts:
 
+        ```
         mgmt1.bdr.nl
         en1.bdr.nl
         mn1.bdr.nl
         wn1.bdr.nl
+        ```
 
     * Copy the private key, /root/.ssh/id_rsa, in the required field
     * Confirm hosts
