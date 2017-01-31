@@ -176,6 +176,7 @@ Now that the service is installed we will setup the desired timezone and date se
     Change the existing users for "local", "IPv4" and "IPv6" from *all* to *postgres* and add the following lines to the file:
     
     ```
+    local ambaridb ambari                         md5
     host  ambaridb ambari             10.0.0.2/32 md5
     host  rangerdb ranger,rangeraudit 10.0.0.2/32 md5
     host  hivedb   hive               10.0.0.3/32 md5
