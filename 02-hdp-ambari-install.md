@@ -7,8 +7,8 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 1. Connect to the management node
 
 1. Become root
-
-       $ sudo su -
+   
+        $ sudo su -
     
 1. Kick off Ambari setup
 
