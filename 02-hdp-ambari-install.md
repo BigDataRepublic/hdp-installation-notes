@@ -14,6 +14,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
 1. Kick off Ambari setup
 
+    ```
     root $ ambari-server setup
     * Customize user account for ambari-server daemon [y/n] (n)? y
       Enter user account for ambari-server daemon (root): ambari
@@ -24,7 +25,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
       [2] Oracle JDK 1.7 + Java Cryptography Extension (JCE) Policy Files 7
       [3] Custom JDK
       ==============================================================================
-    * Enter choice (1): 1
+    * Enter choice (1): 1  
       To download the Oracle JDK and the Java Cryptography Extension (JCE) Policy Files you must accept the license terms found at http://www.oracle.com/technetwork/java/javase/terms/license/index.html and not accepting will cancel the Ambari Server setup and you must install the JDK and JCE files manually.
       Do you accept the Oracle Binary Code License Agreement [y/n] (y)? y
       Downloading JDK from http://public-repo-1.hortonworks.com/ARTIFACTS/jdk-8u60-linux-x64.tar.gz to /var/lib/ambari-server/resources/jdk-8u60-linux-x64.tar.gz
@@ -65,6 +66,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
       .....
       Adjusting ambari-server permissions and ownership...
       Ambari Server 'setup' completed successfully.
+    ```
 
 1. Start the ambari server
 
@@ -76,9 +78,9 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
 1. Open the Ambari webinterface in a browser
 
-    http://mgmt1.bdr.nl:8080
+    http://10.0.0.2:8080
 
-    Login with user: ambari, password ambari
+    Login with user: `admin`, password `admin`
 
 1. Launch the install wizzard
 
