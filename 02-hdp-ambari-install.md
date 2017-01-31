@@ -118,18 +118,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
     * Assign masters:
 
-       * mgmt1: 
-            * ZooKeeper Server
-       * mn1: 
-            * NameNode
-            * History Server
-            * App Timeline Server
-            * ResourceManager
-            * ZooKeeper Server
-            * Metric Collector
-        * wn1: 
-            * SNameNode
-            * ZooKeeper Server
+       
 
     * Assign slaves and clients
 
