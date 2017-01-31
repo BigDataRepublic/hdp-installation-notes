@@ -118,6 +118,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * Assign slaves and clients
 
         * mgmt1: 
+            * NodeManager
             * Client
         * mn1: 
             * NodeManager
@@ -127,6 +128,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
             * DataNode
             * Client
         * en1: 
+            * NodeManager
             * Client
 
     * Customize services. For the minimal installation all configuration
