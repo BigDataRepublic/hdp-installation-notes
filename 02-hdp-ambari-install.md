@@ -119,6 +119,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * Assign masters:
 
     ![HDP master config](img/hdp_master_config.png)
+    <img src="img/hdp_master_config.png" width=400>
        
 
     * Assign slaves and clients
