@@ -111,10 +111,10 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * We go for a minimal installation, which we will gradually extend. Therefore
       only select the following services:
 
-      HDFS
-      YARN + MapReduce2
-      ZooKeeper
-      Ambari Metrics
+      * HDFS
+      * YARN + MapReduce2
+      * ZooKeeper
+      * Ambari Metrics
 
     * Assign masters:
 
