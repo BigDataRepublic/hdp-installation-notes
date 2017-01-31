@@ -115,7 +115,8 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
     
 1. Disable Transparant Huge Pages  
-Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memory block size. The standard size of a memory block is 4kb but with THP you can increase the blocks to 256MB. However, in memory databases benifit of small memory blocks because they know which blocks contains which data but they do not know where in the block this exact data lies. This means that the database would rather look through 4kb of data than through 256mb of data.
+
+    Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memory block size. The standard size of a memory block is 4kb but with THP you can increase the blocks to 256MB. However, in memory databases benifit of small memory blocks because they know which blocks contains which data but they do not know where in the block this exact data lies. This means that the database would rather look through 4kb of data than through 256mb of data.
     
     ```
     $ vim /etc/rc.local
