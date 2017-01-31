@@ -82,8 +82,28 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
     $ hostname
     ```
+    
+1. Disable Transparant Huge Pages  
 
-# ALERT ALERT DO ONLY ON Host mgmt1.bdr.nl
+    Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memory block size. The standard size of a memory block is 4kb but with THP you can increase the blocks to 256MB. However, in memory databases benifit of small memory blocks because they know which blocks contains which data but they do not know where in the block this exact data lies. This means that the database would rather look through 4kb of data than through 256mb of data.
+    
+    ```
+    $ vim /etc/rc.local
+    ```
+    ```
+    # disable THP at boot time
+    if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+      echo never > /sys/kernel/mm/redhat_transparent_hugepage/enabled
+    fi
+    if test -f /sys/kernel/mm/transparent_hugepage/defrag;
+      then echo never > /sys/kernel/mm/redhat_transparent_hugepage/defrag
+    fi
+    ```
+    ```
+    $ sh /etc/rc.local
+    ```
+
+# ALERT: DO ONLY ON Host mgmt1.bdr.nl
 
 1. Become root
 
@@ -114,34 +134,6 @@ Now that the service is installed we will setup the desired timezone and date se
     $ rsync -a --relative .ssh/authorized_keys wn1
     ```
     
-1. Disable Transparant Huge Pages  
-
-    Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memory block size. The standard size of a memory block is 4kb but with THP you can increase the blocks to 256MB. However, in memory databases benifit of small memory blocks because they know which blocks contains which data but they do not know where in the block this exact data lies. This means that the database would rather look through 4kb of data than through 256mb of data.
-    
-    ```
-    $ vim /etc/rc.local
-    ```
-    ```
-    # disable THP at boot time
-    if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
-      echo never > /sys/kernel/mm/redhat_transparent_hugepage/enabled
-    fi
-    if test -f /sys/kernel/mm/transparent_hugepage/defrag;
-      then echo never > /sys/kernel/mm/redhat_transparent_hugepage/defrag
-    fi
-    ```
-    ```
-    $ sh /etc/rc.local
-    ```
-
-    Copy this configuration to the other nodes:
-
-    ```
-    $ scp /etc/rc.local mn1:/etc
-    $ scp /etc/rc.local wn1:/etc
-    $ scp /etc/rc.local en1:/etc
-    ```
-
 # Install Ambari and PostgreSQL on the management node
 
 1. Install Ambari
