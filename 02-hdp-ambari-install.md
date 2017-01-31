@@ -93,7 +93,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
         wn1.bdr.nl
         ```
 
-    * Copy the private key, /root/.ssh/id_rsa, in the required field
+    * Copy-paste the private key (`cat /root/.ssh/id_rsa`), in the required field
     * Confirm hosts
 
         If registration fails, check if you can do an ssh, passwordless login,
