@@ -129,9 +129,9 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
     $ ssh-keygen (Press enter for every question)
     $ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-    $ rsync -a --relative .ssh/authorized_keys en1
-    $ rsync -a --relative .ssh/authorized_keys mn1
-    $ rsync -a --relative .ssh/authorized_keys wn1
+    $ rsync -a --relative .ssh/authorized_keys en1:
+    $ rsync -a --relative .ssh/authorized_keys mn1:
+    $ rsync -a --relative .ssh/authorized_keys wn1:
     ```
     
 # Install Ambari and PostgreSQL on the management node
