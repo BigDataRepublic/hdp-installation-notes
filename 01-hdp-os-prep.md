@@ -111,12 +111,6 @@ Now that the service is installed we will setup the desired timezone and date se
     $ su -
     ```
 
-1. Install wget
-    
-    ```
-    $ yum install wget
-    ```
-    
 1. Make sure that the hostname is set to the FQDN
 
     ```
@@ -136,6 +130,12 @@ Now that the service is installed we will setup the desired timezone and date se
     
 # Install Ambari and PostgreSQL on the management node
 
+1. Install wget
+    
+    ```
+    $ yum install wget
+    ```
+    
 1. Install Ambari
     
     ```
@@ -210,7 +210,7 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
     
     ```
-    $ sudo su - postgres
+    $ su - postgres
     $ psql
     ```
     
@@ -251,6 +251,10 @@ Now that the service is installed we will setup the desired timezone and date se
     $ psql -U ambari -d ambaridb (Password = ambari)
     ambaridb=# \i /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
     ambaridb=# \q
+    ```
+    
+    ```
+    $ exit
     ```
 
 1. Make sure Ambari knows how to talk PostgreSQL
