@@ -118,9 +118,8 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
     * Assign masters:
 
-    ![HDP master config](img/hdp_master_config.png)
     <img src="img/hdp_master_config.png" width=400>
-       
+      
 
     * Assign slaves and clients
 
@@ -147,7 +146,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
       To this end we need to adapt the HDFS configuration:
 
-      Add the following two properties to Custom core site:
+      Add the following two properties to *Custom core site* (under *Advanced*):
         
         ```
         hadoop.proxyuser.ambari.groups=*
@@ -156,14 +155,14 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
     * Review the final configuration and start deployment
 
-If everything went without problems, we have now a minimal HDP which runs:
-
+    If everything went without problems, we have now a minimal HDP which runs:
+    
     * HDFS
     * MapReduce2
     * YARN
     * ZooKeeper
 
-Monitoring the cluster is enabled by the ambari metric agents that run on the
+    Monitoring the cluster is enabled by the ambari metric agents that run on the
 hosts. The next step will be to configure NameNode High Availability (HA).
 
 1. A first simple test to see if the cluster is up to it's job
