@@ -118,17 +118,34 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
     * Assign masters:
 
-        mgmt1: ZooKeeper Server
-          mn1: NameNode, History Server, App Timeline Server, ResourceManager,
-               ZooKeeper Server, Metric Collector
-          wn1: SNameNode, ZooKeeper Server
+       * mgmt1: 
+            * ZooKeeper Server
+       * mn1: 
+            * NameNode
+            * History Server
+            * App Timeline Server
+            * ResourceManager
+            * ZooKeeper Server
+            * Metric Collector
+        * wn1: 
+            * SNameNode
+            * ZooKeeper Server
 
     * Assign slaves and clients
 
-        mgmt1: NodeManager, Client
-          mn1: DataNode, Client
-          wn1: DataNode, NodeManager, Client
-          en1: NodeManager, Client
+        * mgmt1: 
+            * NodeManager
+            * Client
+        * mn1: 
+            * DataNode
+            * Client
+        * wn1: 
+            * DataNode
+            * NodeManager
+            * Client
+        * en1: 
+            * NodeManager
+            * Client
 
     * Customize services. For the minimal install we have chosen all configuration
       options should have been addresse properly by with recommended defaults.
