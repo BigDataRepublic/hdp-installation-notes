@@ -68,11 +68,11 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
 1. Start the ambari server
 
-       $ ambari-server start
+        $ ambari-server start
     
    if errors occur take a look at the startup log
 
-       $ cat /var/log/ambari-server/ambari-server.out
+        $ cat /var/log/ambari-server/ambari-server.out
 
 1. Open the Ambari webinterface in a browser
 
