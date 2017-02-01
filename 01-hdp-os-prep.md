@@ -270,6 +270,8 @@ Now that the service is installed we will setup the desired timezone and date se
 
 1. Create a dedicated user for running ambari
 
+  This is more secure than running ambari as root, as the ambari user has less rights.
+
     ```
     $ groupadd hadoop
     $ useradd -G hadoop ambari
