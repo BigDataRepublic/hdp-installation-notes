@@ -63,7 +63,9 @@ Now that the service is installed we will setup the desired timezone and date se
 	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
     ```
 
-    **NOTE**: For each host add localhost to the right line!
+    **NOTE 1**: For each host add localhost to the right line!
+
+    **NOTE 2**: Carefully check the last two lines. Those should not contain the hostname
 
 1. Edit /etc/sysconfig/network to use the proper FQDN for the HOSTNAME property
 
