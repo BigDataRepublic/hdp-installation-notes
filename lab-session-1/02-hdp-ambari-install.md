@@ -145,7 +145,8 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * ZooKeeper
 
     Monitoring the cluster is enabled by the ambari metrics agents that run on the
-hosts. The next step will be to configure NameNode High Availability (HA).
+    hosts. Before moving on, first check in Ambari that all installed services are
+    running as expected. Perform troubleshooting when this is not the case.
 
 1. A first simple test to see if the cluster is up to it's job
 
