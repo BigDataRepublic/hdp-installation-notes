@@ -153,6 +153,6 @@ hosts. The next step will be to configure NameNode High Availability (HA).
 
         $ sudo su - hdfs
 
-    Now write 100MB of random data to the cluster
+    Now write 10MB of random data to the cluster
 
-        $ yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar randomwriter -Dtest.randomwrite.total_bytes=10000000 test-after-upgrade
+        $ yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar randomwriter -Dtest.randomwrite.total_bytes=10240 test-after-upgrade
