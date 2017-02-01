@@ -1,8 +1,24 @@
-**NOTE:** Instructions based on CentOS6, adapt to RHEL6 where needed.
+# Create virtual machines
 
-# All hosts
+1. Use Vagrant to create the virtual machines for this lab session:
 
-1. Become root
+  ```
+  $ vagrant up
+  ```
+
+  Once provisioning is complete, you can login to the machines using vagrant or
+  plain ssh:
+
+  ```
+  $ vagrant ssh mn1
+  $ ssh 10.0.02
+  ```
+
+# Host: All - General preparations
+
+**NOTE:** These steps need to be performed on each of the 4 hosts of cluster.
+
+1. Become root, if asked for a password: `vagrant`
 
     ```
     $ su -
@@ -16,12 +32,12 @@
 
 1. Configure timezone and ntpd  
 First we will install and run the ntp deamon: A Network Time Protocol daemon. This protocol is the most common method to synchronize the software clock of a GNU/Linux system with internet time servers. It is designed to ensure that all nodes on your clusters have the same idea about what time and day it is.
-    
+
     ```
     $ yum install ntp
     ```
 Now that the service is installed we will setup the desired timezone and date settings. We will backup the current settings and use the Amsterdam timezone as the new settings. After we have set the settings the ntpd deamon will be started.
-    
+
     ```
     $ mv /etc/localtime /etc/localtime.bkp
     $ cp /usr/share/zoneinfo/Europe/Amsterdam /etc/localtime
@@ -34,21 +50,21 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
     vim /etc/hosts
     ```
-    
+
     The content of the file should be:
-    
+
     ```
-	10.0.0.2 mgmt1.bdr.nl mgmt1 localhost
-	10.0.0.3 en1.bdr.nl en1
-	10.0.0.4 mn1.bdr.nl mn1
-	10.0.0.5 wn1.bdr.nl wn1
+	10.0.0.2 mn1.bdr.nl mn1 localhost
+	10.0.0.3 mn2.bdr.nl mn2
+	10.0.0.4 wn1.bdr.nl wn1
+	10.0.0.5 wn2.bdr.nl wn2
 
 	127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
 	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
     ```
-   
-    NOTE: For each host add localhost to the right line!
-   
+
+    **NOTE**: For each host add localhost to the right line!
+
 1. Edit /etc/sysconfig/network to use the proper FQDN for the HOSTNAME property
 
 1. Disable IPv6 because Hadoop does not fully support IPv6 as of yet
@@ -82,11 +98,11 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
     $ hostname
     ```
-    
+
 1. Disable Transparant Huge Pages  
 
     Transparant Huge Pages (THP) are a setting in Linux that enable a flexible memory block size. The standard size of a memory block is 4kb but with THP you can increase the blocks to 256MB. However, in memory databases benifit of small memory blocks because they know which blocks contains which data but they do not know where in the block this exact data lies. This means that the database would rather look through 4kb of data than through 256mb of data.
-    
+
     ```
     $ vim /etc/rc.local
     ```
@@ -103,7 +119,7 @@ Now that the service is installed we will setup the desired timezone and date se
     $ sh /etc/rc.local
     ```
 
-# ALERT: DO ONLY ON Host mgmt1.bdr.nl
+# Host: mn1.bdr.nl - SSH configuration
 
 1. Become root
 
@@ -115,29 +131,40 @@ Now that the service is installed we will setup the desired timezone and date se
 
     ```
     $ hostname
-    mgmt1.bdr.nl
+    mn1.bdr.nl
     ```
-    
+
 1. Setup password-less login with SSH by copying the public key to all the nodes.
 
     ```
     $ ssh-keygen (Press enter for every question)
     $ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-    $ rsync -a --relative .ssh/authorized_keys en1:
-    $ rsync -a --relative .ssh/authorized_keys mn1:
+    $ rsync -a --relative .ssh/authorized_keys mn2:
     $ rsync -a --relative .ssh/authorized_keys wn1:
+    $ rsync -a --relative .ssh/authorized_keys wn2:
     ```
-    
-# Install Ambari and PostgreSQL on the management node
+  Enter yes to add each host to the list of known hosts. When asked for a password, you can use `vagrant`.
+
+1. Make sure you can login without a password from mn1 to each of the nodes:
+
+  ```
+  root@mn1 $ ssh mn1
+  root@mn1 $ exit
+  root@mn1 $ ssh mn2
+  root@mn2 $ exit
+  ...
+  ```
+
+# Host: mn1.bdr.nl - Install Ambari and PostgreSQL
 
 1. Install wget
-    
+
     ```
     $ yum install wget
     ```
-    
+
 1. Install Ambari
-    
+
     ```
     $ wget -nv http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.1.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
     $ yum install ambari-server
@@ -145,8 +172,7 @@ Now that the service is installed we will setup the desired timezone and date se
 
 1. Install PostgreSQL 9.3 (https://wiki.postgresql.org/wiki/YUM_Installation)
 
-    
-    We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
+  We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
 
     ```
     $ vim /etc/yum.repos.d/CentOS-Base.repo
@@ -161,32 +187,31 @@ Now that the service is installed we will setup the desired timezone and date se
     $ chkconfig postgresql-9.3 on
     $ service postgresql-9.3 start
     ```
-    
+
+1. Configure access to postgresql
+<!--
     [MICHEL: deze punten weglaten?]
     Make sure password access of postgres is possible
     Change password authentication [info](http://stackoverflow.com/questions/18664074/getting-error-peer-authentication-failed-for-user-postgres-when-trying-to-ge)
     Create proper tables and roles [info](https://docs.hortonworks.com/HDPDocuments/Ambari-2.1.2.1/bk_ambari_reference_guide/content/_using_ambari_with_postgresql.html)
     Make sure the database can be accessed over tcp/ip [info](http://www.cyberciti.biz/tips/postgres-allow-remote-access-tcp-connection.html)
-    
+-->
     ```
     root $ su - postgres
     postgres $ vim /var/lib/pgsql/9.3/data/pg_hba.conf
     ```
-    
+
     Change the existing users for "local", "IPv4" and "IPv6" from *all* to *postgres* and add the following lines to the file:
-    
+
     ```
     local ambaridb ambari                         md5
     host  ambaridb ambari             10.0.0.2/32 md5
-    host  rangerdb ranger,rangeraudit 10.0.0.2/32 md5
-    host  hivedb   hive               10.0.0.3/32 md5
-    host  ooziedb  oozie              10.0.0.3/32 md5
     ```
-    
+
     ```
     postgres $ vim /var/lib/pgsql/9.3/data/postgresql.conf
     ```
-    
+
     Uncomment the following line and change the value:
 
     ```
@@ -199,68 +224,41 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
 
 1. Prepare Postgres databases for HDP.
-    We will setup the following databases:
-    
+    We will setup the following database:
+
     ```
     database name | user name  | password
     --------------+------------+------------
     ambaridb      | ambari     | ambari
-    hivedb        | hive       | hive
-    ooziedb       | oozie      | oozie
-    rangerdb      | ranger     | ranger
     ```
-    
+
     ```
     $ su - postgres
     $ psql
     ```
-    
+
     ```
     postgres=# CREATE DATABASE ambaridb;
     postgres=# CREATE USER ambari WITH PASSWORD 'ambari';
     postgres=# GRANT ALL PRIVILEGES ON DATABASE ambaridb TO ambari;
     ```
-    
+
     ```
     postgres=# \connect ambaridb;
     ambaridb=# CREATE SCHEMA ambari AUTHORIZATION ambari;
     ambaridb=# ALTER SCHEMA ambari OWNER TO ambari;
     ambaridb=# ALTER ROLE ambari SET search_path to ‘ambari’, 'public';
-    ```
-    
-    ```
-    ambaridb=# \c postgres postgres
-    postgres=# CREATE DATABASE hivedb;
-    postgres=# CREATE USER hive WITH PASSWORD 'hive';
-    postgres=# GRANT ALL PRIVILEGES ON DATABASE hivedb TO hive;
-    ```
-    
-    ```
-    postgres=# CREATE DATABASE ooziedb;
-    postgres=# CREATE USER oozie WITH PASSWORD 'oozie';
-    postgres=# GRANT ALL PRIVILEGES ON DATABASE ooziedb TO oozie;
-    ```
-    
-    ```
-    postgres=# CREATE DATABASE rangerdb;
-    postgres=# CREATE USER ranger WITH PASSWORD 'ranger';
-    postgres=# GRANT ALL PRIVILEGES ON DATABASE rangerdb TO ranger;
-    postgres=# \q
-    ```
-    
-    ```
-    $ psql -U ambari -d ambaridb (Password = ambari)
     ambaridb=# \i /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
     ambaridb=# \q
     ```
-    
+
     ```
     $ exit
     ```
 
 1. Make sure Ambari knows how to talk PostgreSQL
     We will install a driver to connect from ambari to postgres and then connect to postgres using this driver.
-    
+
     ```
     $ yum install postgresql-jdbc
     $ ambari-server setup --jdbc-db=postgres --jdbc-driver=/usr/share/java/postgresql-jdbc.jar
