@@ -237,27 +237,27 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
 
     ```
-    $ su - postgres
-    $ psql
+    $ sudo -u postgres psql
     ```
 
     ```
     postgres=# CREATE DATABASE ambaridb;
     postgres=# CREATE USER ambari WITH PASSWORD 'ambari';
     postgres=# GRANT ALL PRIVILEGES ON DATABASE ambaridb TO ambari;
-    ```
-
-    ```
     postgres=# \connect ambaridb;
     ambaridb=# CREATE SCHEMA ambari AUTHORIZATION ambari;
     ambaridb=# ALTER SCHEMA ambari OWNER TO ambari;
     ambaridb=# ALTER ROLE ambari SET search_path to ‘ambari’, 'public';
-    ambaridb=# \i /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
     ambaridb=# \q
     ```
 
     ```
-    $ exit
+    $ psql -U ambari -d ambaridb
+    ```
+
+    ```
+    ambaridb=# \i /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
+    ambaridb=# \q
     ```
 
 1. Make sure Ambari knows how to talk PostgreSQL
