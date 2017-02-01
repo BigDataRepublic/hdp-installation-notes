@@ -10,23 +10,23 @@ For complete documentation on Kerberizing an Ambari managed cluster take a look
 
 1. Kerberos wizard - Get started
 
-   ![](img/kerberos-wizard-1.png)
+   ![](../img/kerberos-wizard-1.png)
 
 1. Kerberos wizard - Configure kerberos
 
-    ![](img/kerberos-wizard-2.png)
+    ![](../img/kerberos-wizard-2.png)
 
 1. Kerberos wizard - Configure Identities
 
    * Remove clustername from smoke/hdfs principals to remove the -${cluster_name} references to look like below
 
-   ![](img/kerberos-wizard-3.png)
+   ![](../img/kerberos-wizard-3.png)
 
 1. Kerberos wizard - Confirm Configuration
 
    Download csv file but **DO NOT** click Next yet
 
-   ![](img/kerberos-wizard-4.png)
+   ![](../img/kerberos-wizard-4.png)
 
 # Configure hosts
 
@@ -77,15 +77,15 @@ root@mgmt1 $ sudo -u hdfs kinit -kt /etc/security/keytabs/hdfs.headless.keytab h
 
 1. Kerberos wizard - Stop Services
 
-   ![](img/kerberos-wizard-5.png)
+   ![](../img/kerberos-wizard-5.png)
 
 1. Kerberos wizard - Kerberize Cluster
 
-  ![](img/kerberos-wizard-6.png)
+  ![](../img/kerberos-wizard-6.png)
 
 1. Kerberos wizard - Start and Test Services
 
-  ![](img/kerberos-wizard-6.png)
+  ![](../img/kerberos-wizard-6.png)
 
 
 # Kerberos quick guide
@@ -150,19 +150,19 @@ http://hortonworks.com/wp-content/uploads/2014/10/Security-workshop-HDP-2_1-scri
 When things do not go as expected look at the error messages to get some hints
 on what problem needs to be solved:
 
-![](img/kerberos-wizard-ts-1.png)
+![](../img/kerberos-wizard-ts-1.png)
 
 Click on the "Start and test services" link.
 
-![](img/kerberos-wizard-ts-2.png)
+![](../img/kerberos-wizard-ts-2.png)
 
 Chose a node which did not start correctly. E.g. mn1.bdr.nl:
 
-![](img/kerberos-wizard-ts-3.png)
+![](../img/kerberos-wizard-ts-3.png)
 
 Chose the service that failed to start. E.g. Namenode start:
 
-![](img/kerberos-wizard-ts-4.png)
+![](../img/kerberos-wizard-ts-4.png)
 
 The full text of the error message in this case is:
 
@@ -215,7 +215,7 @@ kinit: Clients credentials have been revoked while getting initial credentials
 Let's analyze the kerberos.csv file to get see what's going on. Opening the
 file in Excel and sorting on principal type we find:
 
-![](img/kerberos-wizard-ts-5.png)
+![](../img/kerberos-wizard-ts-5.png)
 
 One thing we notice is that the principal name is the same, even when the host
 differs. What happens is that first one node retrieves a keytab for the
