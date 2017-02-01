@@ -157,3 +157,15 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     Now write 10MB of random data to the cluster
 
         $ yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar randomwriter -Dtest.randomwrite.total_bytes=10240 test-after-upgrade
+
+   When things don't go as expected start troubleshooting the issue. Check in
+   Ambari the status and configuration of Yarn and HDFS. When HDFS is starting to
+   fill up these are some useful commands (run on mn1.bdr.nl):
+
+   '''
+   $ su - hdfs
+   # Find large files / directories in HDFS
+   $ hdfs fsck / -files | grep -v "<dir>" | gawk '{print $2, $1;}'  | sort -n
+   # Permanantly remove files no longer needed.
+   $ hdfs dfs -rm -r -f -skipTrash /user/hdfs/test-after-upgrade/
+   '''
