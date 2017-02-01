@@ -152,9 +152,8 @@ Now that the service is installed we will setup the desired timezone and date se
     $ vim /etc/yum.repos.d/CentOS-Base.repo
     ```
 
-    ```
     Add line: `exclude=postgresql*` to base and updates section
-    ```
+
     ```
     $ yum localinstall https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-2.noarch.rpm
     $ yum install postgresql93-server
