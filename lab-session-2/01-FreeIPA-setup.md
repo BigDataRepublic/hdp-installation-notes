@@ -38,11 +38,11 @@ identity management experts within the organisation.
     root@ipa $ vim /etc/hosts
 ```
 ```
-    10.0.0.2    mgmt1.bdr.nl mgmt1
-    10.0.0.3    en1.bdr.nl en1
-    10.0.0.4    mn1.bdr.nl mn1
-    10.0.0.5    wn1.bdr.nl wn1 localhost
-    10.0.0.6    ipa.bdr.nl ipa
+    10.0.0.2    mn1.bdr.nl mn1
+    10.0.0.3    mn2.bdr.nl mn2
+    10.0.0.4    wn1.bdr.nl wn1
+    10.0.0.5    wn2.bdr.nl wn2 
+    10.0.0.6    ipa.bdr.nl ipa localhost
 
     127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
     ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
@@ -117,14 +117,14 @@ to 127.0.0.1.
 ```
     Look for hosts that do not return any matches.
 
-1. For each host (mgmt1, en1,mn1,wn1) that did not return a match: Install ipa
+1. For each host (mn1, mn2,wn1, wn2) that did not return a match: Install ipa
    client and ldap clients on mgmt1
 ```
-    $ ssh mgmt1
-    vagrant@mgmt1 $ sudo su -
-    root@mgmt1 $ yum install ipa-client openldap-clients
-    root@mgmt1 $ ipa-client-install --domain=bdr.nl --server=ipa.bdr.nl --mkhomedir -p admin@BDR.NL -W
-    Hostname: mgmt1.bdr.nl
+    $ ssh mn1
+    vagrant@mn1 $ sudo su -
+    root@mn1 $ yum install ipa-client openldap-clients
+    root@mn1 $ ipa-client-install --domain=bdr.nl --server=ipa.bdr.nl --mkhomedir -p admin@BDR.NL -W
+    Hostname: mn1.bdr.nl
     Realm: BDR.NL
     DNS Domain: bdr.nl
     IPA Server: ipa.bdr.nl
@@ -166,10 +166,10 @@ to 127.0.0.1.
 
 1. Check if the ldap search functionality is working correctly,
 ```
-    root@mgmt1 $ ldapsearch -h ipa.bdr.nl:389 -D 'uid=admin,cn=users,cn=accounts,dc=bdr,dc=nl' -w bdr-ipa-admin -x -b 'dc=bdr,dc=nl' uid=mting
-    root@mgmt1 $ id mting
+    root@mn1 $ ldapsearch -h ipa.bdr.nl:389 -D 'uid=admin,cn=users,cn=accounts,dc=bdr,dc=nl' -w bdr-ipa-admin -x -b 'dc=bdr,dc=nl' uid=mting
+    root@mn1 $ id mting
     uid=996000005(mting) gid=996000005(mting) groups=996000005(mting),996000001(marketing)
-    root@mgmt1 $ groups mting
+    root@mn1 $ groups mting
     mting : mting marketing
 ```
 
