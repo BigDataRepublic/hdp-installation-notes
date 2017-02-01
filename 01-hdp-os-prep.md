@@ -145,11 +145,12 @@ Now that the service is installed we will setup the desired timezone and date se
 
 1. Install PostgreSQL 9.3 (https://wiki.postgresql.org/wiki/YUM_Installation)
 
+    
+    We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
+
     ```
     $ vim /etc/yum.repos.d/CentOS-Base.repo
     ```
-
-1. We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
 
     ```
     Add line: `exclude=postgresql*` to base and updates section
