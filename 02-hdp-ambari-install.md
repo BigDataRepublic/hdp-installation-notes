@@ -4,12 +4,12 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
 1. Walk through hdp-ambari-install-checklist.md
 
-1. Connect to the management node
+1. Connect to `mn1.bdr.nl (10.0.0.2)`
 
 1. Become root
-   
+
         $ sudo su -
-    
+
 1. Kick off Ambari setup
 
     ```
@@ -48,7 +48,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
       [6] - SQL Anywhere
       ==============================================================================
     * Enter choice (1): 4
-    * Hostname (localhost): mgmt1.bdr.nl
+    * Hostname (localhost): mn1.bdr.nl
     * Port (5432): 5432
     * Database name (ambari): ambaridb
     * Postgres schema (ambari): ambari
@@ -69,7 +69,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 1. Start the ambari server
 
         $ ambari-server start
-    
+
    if errors occur take a look at the startup log
 
         $ cat /var/log/ambari-server/ambari-server.out
@@ -87,13 +87,13 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * Enter the list of hosts:
 
         ```
-        mgmt1.bdr.nl
-        en1.bdr.nl
         mn1.bdr.nl
+        mn2.bdr.nl
         wn1.bdr.nl
+        wn2.bdr.nl
         ```
 
-    * Copy-paste the private key (`cat /root/.ssh/id_rsa`), in the required field
+    * Copy-paste the private key from mn1.bdr.nl (`cat /root/.ssh/id_rsa`), in the required field
     * Confirm hosts
 
         If registration fails, check if you can do an ssh, passwordless login,
@@ -113,23 +113,21 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * Assign masters:
 
     <img src="img/hdp_master_config.png" width=400>
-      
+
 
     * Assign slaves and clients
 
-        * mgmt1: 
-            * NodeManager
+        * mn1:
             * Client
-        * mn1: 
+        * mn2:
             * NodeManager
             * DataNode
-            * Client
-        * wn1: 
-            * DataNode
-            * Client
-        * en1: 
+        * wn1:
             * NodeManager
-            * Client
+            * DataNode
+        * wn1:
+            * NodeManager
+            * DataNode
 
     * Customize services. For the minimal installation all configuration
       options should have been addressed properly with the recommended defaults.
@@ -141,7 +139,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
       To this end we need to adapt the HDFS configuration:
 
       Add the following two properties to *Custom core site* (under *Advanced*):
-        
+
         ```
         hadoop.proxyuser.ambari.groups=*
         hadoop.proxyuser.ambari.hosts=*
@@ -150,7 +148,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     * Review the final configuration and start deployment
 
     If everything went without problems, we have now a minimal HDP which runs:
-    
+
     * HDFS
     * MapReduce2
     * YARN
