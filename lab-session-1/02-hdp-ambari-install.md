@@ -117,17 +117,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
 
     * Assign slaves and clients
 
-        * mn1:
-            * Client
-        * mn2:
-            * NodeManager
-            * DataNode
-        * wn1:
-            * NodeManager
-            * DataNode
-        * wn1:
-            * NodeManager
-            * DataNode
+    <img src="../img/hdp_slave_client_config.png" width=400>
 
     * Customize services. For the minimal installation all configuration
       options should have been addressed properly with the recommended defaults.
