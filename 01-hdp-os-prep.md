@@ -159,19 +159,6 @@ Now that the service is installed we will setup the desired timezone and date se
 
 # Host: mn1.bdr.nl - Install Ambari and PostgreSQL
 
-1. Install wget
-
-    ```
-    $ yum install wget
-    ```
-
-1. Install Ambari
-
-    ```
-    $ wget -nv http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.1.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
-    $ yum install ambari-server
-    ```
-
 1. Install PostgreSQL 9.3 (https://wiki.postgresql.org/wiki/YUM_Installation)
 
   We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
@@ -223,6 +210,21 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
     postgres $ exit
     root $ service postgresql-9.3 restart
+    ```
+
+1. Install wget
+
+    ```
+    $ yum install wget
+    ```
+
+1. Install Ambari server
+
+  Before we can finalize the postgresql configuration we need install ambari server, in order to get the required DDL file which creates the proper tables in the ambari database.
+
+    ```
+    $ wget -nv http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.1.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
+    $ yum install ambari-server
     ```
 
 1. Prepare Postgres databases for HDP.
