@@ -11,7 +11,7 @@
 
   ```
   $ vagrant ssh mn1
-  $ ssh 10.0.02
+  $ ssh 10.0.0.2
   ```
 
 # Host: All - General preparations
