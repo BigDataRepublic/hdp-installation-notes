@@ -157,7 +157,7 @@ Based on the documentation at http://docs.hortonworks.com/HDPDocuments/Ambari-2.
     Let's launch a hello world Map Reduce job: word count. Use the Ambari Interface
     to place a plain text file somewhere in hdfs (e.g. hdfs:///tmp/my-large-text-file.txt)
 
-        $ yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar /tmp/my-large-text-file.txt /tmp/my-large-text-file-word-count
+        $ yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar wordcount /tmp/my-large-text-file.txt /tmp/my-large-text-file-word-count
 
 1. Sometimes things don't go as expected. Try launching the following command:
 
