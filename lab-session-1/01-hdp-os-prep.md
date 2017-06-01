@@ -163,124 +163,118 @@ Now that the service is installed we will setup the desired timezone and date se
 
 1. Install PostgreSQL 9.3 (https://wiki.postgresql.org/wiki/YUM_Installation)
 
-  We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
+   We will introduce a new repository for postgresql because it provides a newer version than the standard. For this to be effective we first need to disable postgresql in the standard repository.
 
-    ```
-    $ vim /etc/yum.repos.d/CentOS-Base.repo
-    ```
+   ```
+   $ vim /etc/yum.repos.d/CentOS-Base.repo
+   ```
 
-  Add line: `exclude=postgresql*` to base and updates section
+   Add line: `exclude=postgresql*` to base and updates section
 
-    ```
-    $ yum localinstall https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-2.noarch.rpm
-    $ yum install postgresql93-server
-    $ service postgresql-9.3 initdb
-    $ chkconfig postgresql-9.3 on
-    $ service postgresql-9.3 start
-    ```
+   ```
+   $ yum localinstall https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-2.noarch.rpm
+   $ yum install postgresql93-server
+   $ service postgresql-9.3 initdb
+   $ chkconfig postgresql-9.3 on
+   $ service postgresql-9.3 start
+   ```
 
 1. Configure access to postgresql
-<!--
-    [MICHEL: deze punten weglaten?]
-    Make sure password access of postgres is possible
-    Change password authentication [info](http://stackoverflow.com/questions/18664074/getting-error-peer-authentication-failed-for-user-postgres-when-trying-to-ge)
-    Create proper tables and roles [info](https://docs.hortonworks.com/HDPDocuments/Ambari-2.1.2.1/bk_ambari_reference_guide/content/_using_ambari_with_postgresql.html)
-    Make sure the database can be accessed over tcp/ip [info](http://www.cyberciti.biz/tips/postgres-allow-remote-access-tcp-connection.html)
--->
-    ```
-    root $ su - postgres
-    postgres $ vim /var/lib/pgsql/9.3/data/pg_hba.conf
-    ```
 
-    Change the existing users for "local", "IPv4" and "IPv6" from *all* to *postgres* and add the following lines to the file:
+   ```
+   root $ su - postgres
+   postgres $ vim /var/lib/pgsql/9.3/data/pg_hba.conf
+   ```
 
-    ```
-    local ambaridb ambari                         md5
-    host  ambaridb ambari             10.0.0.2/32 md5
-    ```
+   Change the existing users for "local", "IPv4" and "IPv6" from *all* to *postgres* and add the following lines to the file:
 
-    ```
-    postgres $ vim /var/lib/pgsql/9.3/data/postgresql.conf
-    ```
+   ```
+   local ambaridb ambari                         md5
+   host  ambaridb ambari             10.0.0.2/32 md5
+   ```
 
-    Uncomment the following line and change the value:
+   ```
+   postgres $ vim /var/lib/pgsql/9.3/data/postgresql.conf
+   ```
 
-    ```
-    listen_addresses = '*'
-    ```
+   Uncomment the following line and change the value:
 
-    ```
-    postgres $ exit
-    root $ service postgresql-9.3 restart
-    ```
+   ```
+   listen_addresses = '*'
+   ```
+
+   ```
+   postgres $ exit
+   root $ service postgresql-9.3 restart
+   ```
 
 1. Install wget
 
-    ```
-    $ yum install wget
-    ```
+   ```
+   $ yum install wget
+   ```
 
 1. Install Ambari server
 
-  Before we can finalize the postgresql configuration we need install ambari server, in order to get the required DDL file which creates the proper tables in the ambari database.
+   Before we can finalize the postgresql configuration we need install ambari server, in order to get the required DDL file which creates the proper tables in the ambari database.
 
-    ```
-    $ wget -nv http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.1.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
-    $ yum install ambari-server
-    ```
+   ```
+   $ wget -nv http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.1.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
+   $ yum install ambari-server
+   ```
 
 1. Prepare Postgres databases for HDP.
     We will setup the following database:
 
-    ```
-    database name | user name  | password
-    --------------+------------+------------
-    ambaridb      | ambari     | ambari
-    ```
+   ```
+   database name | user name  | password
+   --------------+------------+------------
+   ambaridb      | ambari     | ambari
+   ```
 
-    ```
-    $ su - postgres
-    $ psql
-    ```
+   ```
+   $ su - postgres
+   $ psql
+   ```
 
-    ```
-    postgres=# CREATE DATABASE ambaridb;
-    postgres=# CREATE USER ambari WITH PASSWORD 'ambari';
-    postgres=# GRANT ALL PRIVILEGES ON DATABASE ambaridb TO ambari;
-    postgres=# \connect ambaridb;
-    ambaridb=# CREATE SCHEMA ambari AUTHORIZATION ambari;
-    ambaridb=# ALTER SCHEMA ambari OWNER TO ambari;
-    ambaridb=# ALTER ROLE ambari SET search_path to ‘ambari’, 'public';
-    ambaridb=# \q
-    ```
+   ```
+   postgres=# CREATE DATABASE ambaridb;
+   postgres=# CREATE USER ambari WITH PASSWORD 'ambari';
+   postgres=# GRANT ALL PRIVILEGES ON DATABASE ambaridb TO ambari;
+   postgres=# \connect ambaridb;
+   ambaridb=# CREATE SCHEMA ambari AUTHORIZATION ambari;
+   ambaridb=# ALTER SCHEMA ambari OWNER TO ambari;
+   ambaridb=# ALTER ROLE ambari SET search_path to ‘ambari’, 'public';
+   ambaridb=# \q
+   ```
 
-    ```
-    $ psql -U ambari -d ambaridb
-    ```
+   ```
+   $ psql -U ambari -d ambaridb
+   ```
 
-    ```
-    ambaridb=# \i /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
-    ambaridb=# \q
-    ```
+   ```
+   ambaridb=# \i /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
+   ambaridb=# \q
+   ```
     
-    Return to root user:
-    ```
-    $ exit
-    ```
+   Return to root user:
+   ```
+   $ exit
+   ```
 
 1. Make sure Ambari knows how to talk PostgreSQL
     We will install a driver to connect from ambari to postgres and then connect to postgres using this driver.
 
-    ```
-    $ yum install postgresql-jdbc
-    $ ambari-server setup --jdbc-db=postgres --jdbc-driver=/usr/share/java/postgresql-jdbc.jar
-    ```
+   ```
+   $ yum install postgresql-jdbc
+   $ ambari-server setup --jdbc-db=postgres --jdbc-driver=/usr/share/java/postgresql-jdbc.jar
+   ```
 
 1. Create a dedicated user for running ambari
 
-  This is more secure than running ambari as root, as the ambari user has less rights.
+   This is more secure than running ambari as root, as the ambari user has less rights.
 
-    ```
-    $ groupadd hadoop
-    $ useradd -G hadoop ambari
-    ```
+   ```
+   $ groupadd hadoop
+   $ useradd -G hadoop ambari
+   ```
