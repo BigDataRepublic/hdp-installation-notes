@@ -50,8 +50,10 @@ Now that the service is installed we will setup the desired timezone and date se
     ```
     vim /etc/hosts
     ```
+    
+    **NOTE:** The above command says vim, but you can use any editor of your likening (e.g. nano, emacs)
 
-    The content of the file should be:
+    Make sure that the content of the file is the same as:
 
     ```
 	10.0.0.2 mn1.bdr.nl mn1 localhost
