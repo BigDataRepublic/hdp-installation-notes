@@ -12,10 +12,10 @@ https://docs.hortonworks.com/HDPDocuments/Ambari-2.2.1.1/bk_Ambari_Users_Guide/c
 1. Select Service Actions and choose *Enable NameNode HA*.
 1. Enter a name for the Nameservice id: `bdr-hadoop`
 1. Select hosts
-    * mgmt1: JournalNode
     * mn1: NameNode, JournalNode
-    * wn1: Aditional NameNode
-    * en1: JournalNode
+    * mn2: Aditional NameNode
+    * wn1: JournalNode
+    * wn2: JournalNode
 
 1. Create Checkpoints : Follow the instructions in the step. You need to log in
    to your current NameNode host to run the commands to put your NameNode into
